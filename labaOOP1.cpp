@@ -4,6 +4,8 @@
 
 using namespace std;
 
+const double PI = 3.14;
+
 class Car {
 private:
     double speed;
@@ -56,8 +58,8 @@ public:
     }
 
     void move() {
-        speed += acceleration;
-        double radians = angle * speed;
+        speed += this->acceleration;
+        double radians = this->angle * PI / 180.0;
 
         this->position_x += speed * cos(radians);
         this->position_y += speed * sin(radians);
