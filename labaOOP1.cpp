@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <assert.h>
+#include <cmath>
 #include <vector>
 
 using namespace std;
@@ -65,6 +66,19 @@ public:
         this->position_y += speed * sin(radians);
     }
 
+    void speed_up(){
+        if (this->acceleration > 0)
+            this->speed+=this->acceleration;
+    }
+
+    void speed_down(){
+        if (this->acceleration < 0)
+            if (this->speed + this->acceleration > 0)
+                this->speed+=this->acceleration;
+            else
+                throw "value error";
+    }
+
     double get_speed() { return this->speed; }
     pair<double, double> get_position() { return make_pair(this->position_x, this->position_y); }
     double get_angle() { return this->angle; }
@@ -124,10 +138,22 @@ bool test_moving() {
     return true;
 }
 
+bool test_speed_change(){
+    Car my_car(10);
+    my_car.set_acceleration(10);
+    my_car.speed_up();
+    assert(my_car.get_speed() == 20);
+    my_car.set_acceleration(-10);
+    my_car.speed_down();
+    assert(my_car.get_speed() == 10);
+    return true;
+}
+
 int main() {
     assert(test_constructor());
     assert(test_setters());
     assert(test_moving());
+    assert(test_speed_change());
     cout << "all test have been completed" << endl;
     return 0;
 }
