@@ -65,20 +65,6 @@ public:
         this->position_x += speed * cos(radians);
         this->position_y += speed * sin(radians);
     }
-
-    void speed_up(){
-        if (this->acceleration > 0)
-            this->speed+=this->acceleration;
-    }
-
-    void speed_down(){
-        if (this->acceleration < 0)
-            if (this->speed + this->acceleration > 0)
-                this->speed+=this->acceleration;
-            else
-                throw "value error";
-    }
-
     double get_speed() { return this->speed; }
     pair<double, double> get_position() { return make_pair(this->position_x, this->position_y); }
     double get_angle() { return this->angle; }
@@ -94,6 +80,27 @@ public:
         return status;
     }
 };
+
+class BMW_n5 : public Car {
+public:
+    BMW_n5(double _speed = 0, double _position_x = 0, double _position_y = 0, double _angle = 0, double _acceleration = 0)
+        : Car(_speed, _position_x, _position_y, _angle, _acceleration) {}
+
+    void speed_up() {
+        if (get_acceleration() > 0)
+            set_speed(get_speed() + get_acceleration());
+    }
+
+    void speed_down() {
+        if (get_acceleration() < 0) {
+            if (get_speed() + get_acceleration() > 0)
+                set_speed(get_speed() + get_acceleration());
+            else
+                throw "value error";
+        }
+    }
+};
+
 
 bool test_constructor() {
     Car my_car(50, 10, 20, 30, 5);
@@ -139,7 +146,7 @@ bool test_moving() {
 }
 
 bool test_speed_change(){
-    Car my_car(10);
+    BMW_n5 my_car(10);
     my_car.set_acceleration(10);
     my_car.speed_up();
     assert(my_car.get_speed() == 20);
